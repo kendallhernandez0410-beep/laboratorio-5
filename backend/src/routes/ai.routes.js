@@ -9,6 +9,10 @@ import { selectRelevantNotes } from "../services/noteContext.service.js";
 export function createAiRouter({ aiService, notesService }) {
   const router = Router();
 
+  router.get("/estado", (_req, res) => {
+    return res.json(aiService.estado());
+  });
+
   router.post("/preguntar", async (req, res, next) => {
     try {
       const { pregunta } = questionSchema.parse(req.body);

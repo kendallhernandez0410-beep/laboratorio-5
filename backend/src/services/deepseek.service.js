@@ -66,6 +66,13 @@ export function createDeepSeekService({
   }
 
   return {
+    estado() {
+      return {
+        proveedor: "DeepSeek",
+        modelo: model,
+        configurado: Boolean(apiKey)
+      };
+    },
     preguntar(pregunta, notas = []) {
       return complete([
         {

@@ -103,6 +103,17 @@ describe("Smart Notes API", () => {
     assert.match(lastAiRequest.messages[1].content, /Planear la entrega el viernes/);
   });
 
+  it("expone si DeepSeek está configurado sin revelar la API key", async () => {
+    const response = await request(app).get("/api/ia/estado");
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, {
+      proveedor: "DeepSeek",
+      modelo: "deepseek-chat",
+      configurado: true
+    });
+    assert.equal(JSON.stringify(response.body).includes("test-key"), false);
+  });
+
   it("resume una nota existente en tres viñetas", async () => {
     const created = await request(app).post("/api/notas").send({ titulo: "Resumen", contenido: "Texto para resumir." });
     const response = await request(app).post(`/api/notas/${created.body.nota.id}/resumen`);
@@ -168,6 +179,9 @@ describe("Smart Notes API", () => {
   it("explica cuando falta la clave de DeepSeek sin llamar al proveedor", async () => {
     const unconfiguredService = createDeepSeekService({ apiKey: "" });
     const unconfiguredApp = createApp({ aiService: unconfiguredService });
+    const status = await request(unconfiguredApp).get("/api/ia/estado");
+    assert.equal(status.status, 200);
+    assert.equal(status.body.configurado, false);
     const response = await request(unconfiguredApp).post("/api/ia/preguntar").send({ pregunta: "¿Puedes responder?" });
     assert.equal(response.status, 502);
     assert.equal(response.body.codigo, "AI_UNAVAILABLE");

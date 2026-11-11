@@ -99,6 +99,7 @@ Todos los cuerpos y respuestas JSON usan UTF-8.
 | `POST` | `/api/notas` | Crea una nota `{ "titulo": "...", "contenido": "..." }` |
 | `PUT` | `/api/notas/:id` | Actualiza el título y contenido de una nota |
 | `DELETE` | `/api/notas/:id` | Elimina una nota |
+| `GET` | `/api/ia/estado` | Informa proveedor/modelo y si la clave está configurada, sin revelar el secreto |
 | `POST` | `/api/ia/preguntar` | Pregunta sobre Smart Notes o las notas guardadas `{ "pregunta": "..." }` |
 | `POST` | `/api/ia/notas/:id/editar` | Genera una propuesta de edición `{ "instrucciones": "..." }`; no guarda cambios |
 | `POST` | `/api/notas/:id/resumen` | Genera un resumen en tres viñetas breves en español |

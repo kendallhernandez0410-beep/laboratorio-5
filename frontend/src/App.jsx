@@ -9,6 +9,7 @@ import { api } from "./services/api.js";
 function App() {
   const [notes, setNotes] = useState([]);
   const [loadingNotes, setLoadingNotes] = useState(true);
+  const [aiStatus, setAiStatus] = useState(null);
   const [noteBusy, setNoteBusy] = useState(false);
   const [questionBusy, setQuestionBusy] = useState(false);
   const [summaryBusyId, setSummaryBusyId] = useState(null);
@@ -45,6 +46,9 @@ function App() {
   }, [notify]);
 
   useEffect(() => { loadNotes(); }, [loadNotes]);
+  useEffect(() => {
+    api.getAiStatus().then(setAiStatus).catch((error) => notify(error.message, "error"));
+  }, [notify]);
 
   const filteredNotes = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("es");
@@ -306,7 +310,10 @@ function App() {
           <section className="ai-section" id="ai-tools">
             <div className="ai-heading">
               <div><div className="section-kicker">PIENSA EN VOZ ALTA</div><h2>Un poco de ayuda inteligente <Sparkles size={20} /></h2><p>Pregunta sobre Smart Notes o tus notas; abre una nota para pedirle a la IA que la edite.</p></div>
-              <span className="ai-powered"><span className="live-dot" /> CONECTADO A DEEPSEEK</span>
+              <span className={`ai-powered ${aiStatus?.configurado === false ? "ai-not-configured" : ""}`}>
+                <span className="live-dot" />
+                {aiStatus === null ? "ESTADO NO DISPONIBLE" : aiStatus.configurado ? "DEEPSEEK CONFIGURADO" : "FALTA CLAVE DE DEEPSEEK"}
+              </span>
             </div>
             <div className="ai-grid">
               <form className="panel ask-card" onSubmit={handleAsk}>

@@ -100,6 +100,27 @@ export const openApiSpec = {
     }
   },
   paths: {
+    "/api/ia/estado": {
+      get: {
+        tags: ["IA"],
+        summary: "Consultar el estado de configuración de DeepSeek",
+        description: "Devuelve proveedor, modelo y si hay una clave configurada. Nunca devuelve la clave ni comprueba saldo o disponibilidad externa.",
+        responses: {
+          200: {
+            description: "Estado seguro de configuración.",
+            content: json({
+              type: "object",
+              required: ["proveedor", "modelo", "configurado"],
+              properties: {
+                proveedor: { type: "string", example: "DeepSeek" },
+                modelo: { type: "string", example: "deepseek-chat" },
+                configurado: { type: "boolean" }
+              }
+            })
+          }
+        }
+      }
+    },
     "/api/notas": {
       get: {
         tags: ["Notas"],

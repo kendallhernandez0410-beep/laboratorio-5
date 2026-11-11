@@ -23,6 +23,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  getAiStatus: () => request("/ia/estado"),
   listNotes: () => request("/notas"),
   getNote: (id) => request(`/notas/${id}`),
   createNote: (note) => request("/notas", { method: "POST", body: JSON.stringify(note) }),
