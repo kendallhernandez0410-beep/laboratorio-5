@@ -100,7 +100,7 @@ Todos los cuerpos y respuestas JSON usan UTF-8.
 | `GET` | `/api/notas/exportar` | Exporta las notas con fecha y cantidad en JSON |
 | `GET` | `/api/notas/:id` | Obtiene una nota por UUID |
 | `POST` | `/api/notas` | Crea una nota `{ "titulo": "...", "contenido": "..." }` |
-| `PUT` | `/api/notas/:id` | Actualiza el título y contenido de una nota |
+| `PUT` | `/api/notas/:id` | Actualiza el título y contenido de una nota y registra `actualizadaEn` |
 | `DELETE` | `/api/notas/:id` | Elimina una nota |
 | `GET` | `/api/ia/estado` | Informa proveedor/modelo y si la clave está configurada, sin revelar el secreto |
 | `POST` | `/api/ia/preguntar` | Pregunta sobre Smart Notes o las notas guardadas `{ "pregunta": "..." }` |

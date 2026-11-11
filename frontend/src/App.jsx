@@ -293,7 +293,9 @@ function App() {
                         <span>{note.contenido}</span>
                       </button>
                       <div className="note-meta">
-                        <time dateTime={note.creadaEn}>{new Intl.DateTimeFormat("es", { day: "numeric", month: "short" }).format(new Date(note.creadaEn))}</time>
+                        <time dateTime={note.actualizadaEn || note.creadaEn} title={note.actualizadaEn ? "Última actualización" : "Fecha de creación"}>
+                          {new Intl.DateTimeFormat("es", { day: "numeric", month: "short" }).format(new Date(note.actualizadaEn || note.creadaEn))}
+                        </time>
                         <button className="mini-action" onClick={() => handleOpenNote(note)} disabled={detailBusyId === note.id} aria-label={`Editar ${note.titulo} con IA`} title="Editar con IA">
                           {detailBusyId === note.id ? <LoaderCircle className="spin" size={15} /> : <Pencil size={15} />}
                         </button>
@@ -371,7 +373,7 @@ function App() {
         <button className="modal-close" aria-label="Cerrar" onClick={() => { setSelectedNote(null); setEditProposal(null); }}><X size={19} /></button>
         <div className="section-kicker">TU NOTA</div>
         <h2 id="modal-title">{selectedNote.titulo}</h2>
-        <time>{new Intl.DateTimeFormat("es", { dateStyle: "long", timeStyle: "short" }).format(new Date(selectedNote.creadaEn))}</time>
+        <time>{selectedNote.actualizadaEn ? "Actualizada" : "Creada"} {new Intl.DateTimeFormat("es", { dateStyle: "long", timeStyle: "short" }).format(new Date(selectedNote.actualizadaEn || selectedNote.creadaEn))}</time>
         <p>{selectedNote.contenido}</p>
         <button className="primary-button" onClick={() => { const note = selectedNote; setSelectedNote(null); handleSummarize(note); }}><Sparkles size={16} /> Resumir con IA</button>
         <form className="edit-note-form" onSubmit={handleProposeEdit}>

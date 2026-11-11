@@ -53,7 +53,8 @@ export const openApiSpec = {
           id: { type: "string", format: "uuid" },
           titulo: { type: "string", minLength: 2, maxLength: 120 },
           contenido: { type: "string", minLength: 1, maxLength: 10000 },
-          creadaEn: { type: "string", format: "date-time" }
+          creadaEn: { type: "string", format: "date-time" },
+          actualizadaEn: { type: "string", format: "date-time", description: "Se agrega después de la primera edición." }
         }
       },
       CrearNota: {

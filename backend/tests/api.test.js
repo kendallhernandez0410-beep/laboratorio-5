@@ -222,6 +222,8 @@ describe("Smart Notes API", () => {
     const updated = await request(app).put(`/api/notas/${id}`).send(proposal.body.propuesta);
     assert.equal(updated.status, 200);
     assert.equal(updated.body.nota.contenido, "Contenido editado.");
+    assert.ok(Number.isFinite(Date.parse(updated.body.nota.actualizadaEn)));
+    assert.equal(updated.body.nota.creadaEn, created.body.nota.creadaEn);
   });
 
   it("valida las instrucciones y el UUID de edición de notas", async () => {

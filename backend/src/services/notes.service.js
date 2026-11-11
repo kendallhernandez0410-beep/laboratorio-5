@@ -29,7 +29,12 @@ export function createNotesService({ initialNotes = [] } = {}) {
     update(id, { titulo, contenido }) {
       const existing = notes.get(id);
       if (!existing) return null;
-      const updated = { ...existing, titulo, contenido };
+      const updated = {
+        ...existing,
+        titulo,
+        contenido,
+        actualizadaEn: new Date().toISOString()
+      };
       notes.set(id, updated);
       return updated;
     },
