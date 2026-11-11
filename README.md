@@ -88,6 +88,8 @@ Abre la dirección que indique Vite (por defecto `http://localhost:5173`). El se
 
 Las notas se conservan en memoria y se pierden al reiniciar el backend. Al iniciar, el backend agrega cuatro notas de ejemplo sobre Smart Notes, el asistente DeepSeek, la edición de notas y preguntas para probar. Así puedes explorar la interfaz y consultar inmediatamente a la IA sobre la página y esas notas.
 
+El botón de descarga junto al buscador exporta todas las notas actuales a un archivo JSON, útil para guardar una copia antes de reiniciar el servidor.
+
 ## API
 
 Todos los cuerpos y respuestas JSON usan UTF-8.
@@ -95,6 +97,7 @@ Todos los cuerpos y respuestas JSON usan UTF-8.
 | Método | Ruta | Descripción |
 |---|---|---|
 | `GET` | `/api/notas` | Lista las notas |
+| `GET` | `/api/notas/exportar` | Exporta las notas con fecha y cantidad en JSON |
 | `GET` | `/api/notas/:id` | Obtiene una nota por UUID |
 | `POST` | `/api/notas` | Crea una nota `{ "titulo": "...", "contenido": "..." }` |
 | `PUT` | `/api/notas/:id` | Actualiza el título y contenido de una nota |

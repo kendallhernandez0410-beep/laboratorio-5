@@ -100,6 +100,26 @@ export const openApiSpec = {
     }
   },
   paths: {
+    "/api/notas/exportar": {
+      get: {
+        tags: ["Notas"],
+        summary: "Exportar las notas como JSON",
+        responses: {
+          200: {
+            description: "Copia de respaldo con fecha, cantidad y colección de notas.",
+            content: json({
+              type: "object",
+              required: ["exportadoEn", "total", "notas"],
+              properties: {
+                exportadoEn: { type: "string", format: "date-time" },
+                total: { type: "integer", minimum: 0 },
+                notas: { type: "array", items: { $ref: "#/components/schemas/Nota" } }
+              }
+            })
+          }
+        }
+      }
+    },
     "/api/ia/estado": {
       get: {
         tags: ["IA"],

@@ -78,6 +78,18 @@ describe("Smart Notes API", () => {
     assert.equal(list.body.notas.length, 2);
   });
 
+  it("exporta las notas como JSON sin cambiar la colección", async () => {
+    await request(app).post("/api/notas").send({ titulo: "Exportación", contenido: "Nota para respaldar." });
+    const exported = await request(app).get("/api/notas/exportar");
+    assert.equal(exported.status, 200);
+    assert.equal(exported.body.total, 1);
+    assert.equal(exported.body.notas[0].titulo, "Exportación");
+    assert.ok(Number.isFinite(Date.parse(exported.body.exportadoEn)));
+
+    const list = await request(app).get("/api/notas");
+    assert.equal(list.body.notas.length, 1);
+  });
+
   it("responde 404 al consultar una nota inexistente", async () => {
     const response = await request(app).get("/api/notas/00000000-0000-4000-8000-000000000001");
     assert.equal(response.status, 404);

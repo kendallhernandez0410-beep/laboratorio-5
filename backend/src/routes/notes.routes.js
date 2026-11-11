@@ -8,6 +8,15 @@ export function createNotesRouter({ notesService, aiService }) {
     res.json({ notas: notesService.list() });
   });
 
+  router.get("/exportar", (_req, res) => {
+    const notas = notesService.list();
+    return res.json({
+      exportadoEn: new Date().toISOString(),
+      total: notas.length,
+      notas
+    });
+  });
+
   router.get("/:id", (req, res) => {
     const id = noteIdSchema.parse(req.params.id);
     const nota = notesService.get(id);

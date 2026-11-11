@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ArrowDownRight, ArrowUpRight, BookOpen, Check, ChevronRight, CircleHelp,
-  FileText, LayoutDashboard, LoaderCircle, Menu, Pencil, Plus, Save,
+  Download, FileText, LayoutDashboard, LoaderCircle, Menu, Pencil, Plus, Save,
   Send, Sparkles, StickyNote, Trash2, X
 } from "lucide-react";
 import { api } from "./services/api.js";
@@ -88,6 +88,22 @@ function App() {
       if (selectedNote?.id === note.id) setSelectedNote(null);
       if (summary?.notaId === note.id) setSummary(null);
       notify("Nota eliminada.");
+    } catch (error) {
+      notify(error.message, "error");
+    }
+  }
+
+  async function handleExportNotes() {
+    try {
+      const backup = await api.exportNotes();
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `smart-notes-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      notify(`${backup.total} notas exportadas como JSON.`);
     } catch (error) {
       notify(error.message, "error");
     }
@@ -254,6 +270,7 @@ function App() {
                 <div><div className="section-kicker">TU COLECCIÓN</div><h2>Notas recientes <span className="heading-count">{notes.length}</span></h2></div>
                 <div className="panel-actions">
                   <label className="search-box"><span className="sr-only">Buscar notas</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar notas..." /><span className="search-glyph">⌕</span></label>
+                  <button className="icon-button" aria-label="Exportar notas" title="Descargar copia JSON" onClick={handleExportNotes}><Download size={16} /></button>
                   <button className="icon-button" aria-label="Crear nota" title="Crear nota" onClick={() => navigateTo("create-note")}><Plus size={18} /></button>
                 </div>
               </div>
