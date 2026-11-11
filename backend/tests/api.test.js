@@ -5,6 +5,7 @@ import { createApp } from "../src/app.js";
 import { exampleNotes } from "../src/config/exampleNotes.js";
 import { createDeepSeekService } from "../src/services/deepseek.service.js";
 import { createNotesService } from "../src/services/notes.service.js";
+import { selectRelevantNotes } from "../src/services/noteContext.service.js";
 
 const jsonResponse = (body, status = 200) => ({
   ok: status >= 200 && status < 300,
@@ -50,6 +51,20 @@ describe("Smart Notes API", () => {
     assert.equal(response.status, 200);
     assert.equal(response.body.notas.length, 4);
     assert.ok(response.body.notas.some((note) => note.titulo === "Cómo editar una nota con IA"));
+  });
+
+  it("prioriza las notas relacionadas con la pregunta sin exceder el límite de contexto", () => {
+    const notes = Array.from({ length: 25 }, (_, index) => ({
+      id: `nota-${index}`,
+      titulo: index === 0 ? "Ideas del huerto urbano" : `Apuntes generales ${index}`,
+      contenido: index === 0 ? "Semillas, tomates y riego del huerto." : "Notas de reuniones generales.",
+      creadaEn: new Date(2026, 0, index + 1).toISOString()
+    }));
+
+    const selected = selectRelevantNotes(notes, "¿Qué anoté sobre el huerto y los tomates?");
+    assert.equal(selected.length, 20);
+    assert.equal(selected[0].id, "nota-0");
+    assert.ok(selected.every(({ contenido }) => contenido.length <= 600));
   });
 
   it("crea dos notas y lista ambas", async () => {

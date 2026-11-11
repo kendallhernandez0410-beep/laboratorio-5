@@ -104,7 +104,7 @@ Todos los cuerpos y respuestas JSON usan UTF-8.
 | `POST` | `/api/notas/:id/resumen` | Genera un resumen en tres viñetas breves en español |
 | `GET` | `/api-docs` | Abre la documentación Swagger UI |
 
-El asistente conoce las funciones de Smart Notes y recibe los títulos y extractos de hasta 20 notas recientes como contexto para contestar preguntas sobre la página y el contenido guardado. Para editar, abre una nota, escribe las instrucciones en **Editar con IA**, revisa y ajusta la propuesta si hace falta, y pulsa **Confirmar y guardar cambios**. La IA nunca modifica la nota silenciosamente; la actualización confirmada se valida con Zod antes de guardar. La integración no edita archivos del equipo: modifica exclusivamente las notas de Smart Notes.
+El asistente conoce las funciones de Smart Notes y selecciona hasta 20 notas relevantes para la pregunta (con prioridad para las coincidencias en el título) como contexto para contestar preguntas sobre la página y el contenido guardado. Para editar, abre una nota, escribe las instrucciones en **Editar con IA**, revisa y ajusta la propuesta si hace falta, y pulsa **Confirmar y guardar cambios**. La IA nunca modifica la nota silenciosamente; la actualización confirmada se valida con Zod antes de guardar. La integración no edita archivos del equipo: modifica exclusivamente las notas de Smart Notes.
 
 Las solicitudes inválidas devuelven `400` con detalles de validación; una nota inexistente devuelve `404`. Los fallos del proveedor de IA devuelven `502`, excepto los límites de solicitudes (`429`). Las respuestas de IA incluyen información de tokens cuando DeepSeek la proporciona.
 

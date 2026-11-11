@@ -4,6 +4,7 @@ import {
   noteIdSchema,
   questionSchema
 } from "../validators/schemas.js";
+import { selectRelevantNotes } from "../services/noteContext.service.js";
 
 export function createAiRouter({ aiService, notesService }) {
   const router = Router();
@@ -11,11 +12,7 @@ export function createAiRouter({ aiService, notesService }) {
   router.post("/preguntar", async (req, res, next) => {
     try {
       const { pregunta } = questionSchema.parse(req.body);
-      const notas = notesService.list().slice(0, 20).map((nota) => ({
-        id: nota.id,
-        titulo: nota.titulo,
-        contenido: nota.contenido.slice(0, 600)
-      }));
+      const notas = selectRelevantNotes(notesService.list(), pregunta);
       const resultado = await aiService.preguntar(pregunta, notas);
       return res.json({ respuesta: resultado.respuesta, uso: resultado.uso });
     } catch (error) {
