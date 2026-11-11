@@ -133,6 +133,23 @@ describe("Smart Notes API", () => {
     assert.equal(response.body.codigo, "AI_RATE_LIMIT");
   });
 
+  it("responde 504 cuando DeepSeek excede el tiempo de espera", async () => {
+    const timeoutService = createDeepSeekService({
+      apiKey: "test-key",
+      fetchImpl: async () => {
+        const error = new Error("Request timed out");
+        error.name = "TimeoutError";
+        throw error;
+      }
+    });
+    const timeoutApp = createApp({ aiService: timeoutService });
+    const response = await request(timeoutApp)
+      .post("/api/ia/preguntar")
+      .send({ pregunta: "¿Puedes responder?" });
+    assert.equal(response.status, 504);
+    assert.equal(response.body.codigo, "AI_UNAVAILABLE");
+  });
+
   it("explica cuando falta la clave de DeepSeek sin llamar al proveedor", async () => {
     const unconfiguredService = createDeepSeekService({ apiKey: "" });
     const unconfiguredApp = createApp({ aiService: unconfiguredService });

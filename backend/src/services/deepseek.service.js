@@ -11,6 +11,7 @@ export class DeepSeekError extends Error {
 export function createDeepSeekService({
   apiKey = process.env.DEEPSEEK_API_KEY,
   model = process.env.DEEPSEEK_MODEL || "deepseek-chat",
+  timeoutMs = 30000,
   fetchImpl = globalThis.fetch
 } = {}) {
   async function complete(messages, responseFormat) {
@@ -26,13 +27,17 @@ export function createDeepSeekService({
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         },
+        signal: AbortSignal.timeout(timeoutMs),
         body: JSON.stringify({
           model,
           messages,
           ...(responseFormat ? { response_format: responseFormat } : {})
         })
       });
-    } catch {
+    } catch (error) {
+      if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+        throw new DeepSeekError("DeepSeek tardó demasiado en responder. Inténtalo de nuevo.", 504);
+      }
       throw new DeepSeekError("No fue posible conectar con el servicio de IA.", 502);
     }
 
