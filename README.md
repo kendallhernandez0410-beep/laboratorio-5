@@ -1,4 +1,4 @@
-# Smart Notes
+# Smart Notes — laboratorio-5
 
 Sistema web para administrar notas y consultar una IA mediante una API REST con Express. Incluye validación con Zod, manejo centralizado de errores, Swagger UI y pruebas automatizadas.
 
